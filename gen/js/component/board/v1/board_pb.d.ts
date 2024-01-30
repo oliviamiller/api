@@ -6,6 +6,7 @@ import * as common_v1_common_pb from "../../../common/v1/common_pb";
 import * as google_api_annotations_pb from "../../../google/api/annotations_pb";
 import * as google_protobuf_duration_pb from "google-protobuf/google/protobuf/duration_pb";
 import * as google_protobuf_struct_pb from "google-protobuf/google/protobuf/struct_pb";
+import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 
 export class StatusRequest extends jspb.Message {
   getName(): string;
@@ -554,6 +555,90 @@ export class SetPowerModeResponse extends jspb.Message {
 
 export namespace SetPowerModeResponse {
   export type AsObject = {
+  }
+}
+
+export class Tick extends jspb.Message {
+  hasTime(): boolean;
+  clearTime(): void;
+  getTime(): google_protobuf_timestamp_pb.Timestamp | undefined;
+  setTime(value?: google_protobuf_timestamp_pb.Timestamp): void;
+
+  getHigh(): boolean;
+  setHigh(value: boolean): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Tick.AsObject;
+  static toObject(includeInstance: boolean, msg: Tick): Tick.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Tick, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Tick;
+  static deserializeBinaryFromReader(message: Tick, reader: jspb.BinaryReader): Tick;
+}
+
+export namespace Tick {
+  export type AsObject = {
+    time?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+    high: boolean,
+  }
+}
+
+export class StreamTicksRequest extends jspb.Message {
+  getName(): string;
+  setName(value: string): void;
+
+  clearInterruptsList(): void;
+  getInterruptsList(): Array<string>;
+  setInterruptsList(value: Array<string>): void;
+  addInterrupts(value: string, index?: number): string;
+
+  hasExtra(): boolean;
+  clearExtra(): void;
+  getExtra(): google_protobuf_struct_pb.Struct | undefined;
+  setExtra(value?: google_protobuf_struct_pb.Struct): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): StreamTicksRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: StreamTicksRequest): StreamTicksRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: StreamTicksRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): StreamTicksRequest;
+  static deserializeBinaryFromReader(message: StreamTicksRequest, reader: jspb.BinaryReader): StreamTicksRequest;
+}
+
+export namespace StreamTicksRequest {
+  export type AsObject = {
+    name: string,
+    interruptsList: Array<string>,
+    extra?: google_protobuf_struct_pb.Struct.AsObject,
+  }
+}
+
+export class StreamTicksResponse extends jspb.Message {
+  getName(): string;
+  setName(value: string): void;
+
+  hasTick(): boolean;
+  clearTick(): void;
+  getTick(): Tick | undefined;
+  setTick(value?: Tick): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): StreamTicksResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: StreamTicksResponse): StreamTicksResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: StreamTicksResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): StreamTicksResponse;
+  static deserializeBinaryFromReader(message: StreamTicksResponse, reader: jspb.BinaryReader): StreamTicksResponse;
+}
+
+export namespace StreamTicksResponse {
+  export type AsObject = {
+    name: string,
+    tick?: Tick.AsObject,
   }
 }
 

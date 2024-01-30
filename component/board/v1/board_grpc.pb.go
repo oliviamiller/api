@@ -47,6 +47,8 @@ type BoardServiceClient interface {
 	SetPowerMode(ctx context.Context, in *SetPowerModeRequest, opts ...grpc.CallOption) (*SetPowerModeResponse, error)
 	// GetGeometries returns the geometries of the component in their current configuration.
 	GetGeometries(ctx context.Context, in *v1.GetGeometriesRequest, opts ...grpc.CallOption) (*v1.GetGeometriesResponse, error)
+	// StreamTicks starts a stream of ticks for the given digital interrupts
+	StreamTicks(ctx context.Context, in *StreamTicksRequest, opts ...grpc.CallOption) (BoardService_StreamTicksClient, error)
 }
 
 type boardServiceClient struct {
@@ -174,6 +176,38 @@ func (c *boardServiceClient) GetGeometries(ctx context.Context, in *v1.GetGeomet
 	return out, nil
 }
 
+func (c *boardServiceClient) StreamTicks(ctx context.Context, in *StreamTicksRequest, opts ...grpc.CallOption) (BoardService_StreamTicksClient, error) {
+	stream, err := c.cc.NewStream(ctx, &BoardService_ServiceDesc.Streams[0], "/viam.component.board.v1.BoardService/StreamTicks", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &boardServiceStreamTicksClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type BoardService_StreamTicksClient interface {
+	Recv() (*StreamTicksResponse, error)
+	grpc.ClientStream
+}
+
+type boardServiceStreamTicksClient struct {
+	grpc.ClientStream
+}
+
+func (x *boardServiceStreamTicksClient) Recv() (*StreamTicksResponse, error) {
+	m := new(StreamTicksResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // BoardServiceServer is the server API for BoardService service.
 // All implementations must embed UnimplementedBoardServiceServer
 // for forward compatibility
@@ -202,6 +236,8 @@ type BoardServiceServer interface {
 	SetPowerMode(context.Context, *SetPowerModeRequest) (*SetPowerModeResponse, error)
 	// GetGeometries returns the geometries of the component in their current configuration.
 	GetGeometries(context.Context, *v1.GetGeometriesRequest) (*v1.GetGeometriesResponse, error)
+	// StreamTicks starts a stream of ticks for the given digital interrupts
+	StreamTicks(*StreamTicksRequest, BoardService_StreamTicksServer) error
 	mustEmbedUnimplementedBoardServiceServer()
 }
 
@@ -247,6 +283,9 @@ func (UnimplementedBoardServiceServer) SetPowerMode(context.Context, *SetPowerMo
 }
 func (UnimplementedBoardServiceServer) GetGeometries(context.Context, *v1.GetGeometriesRequest) (*v1.GetGeometriesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGeometries not implemented")
+}
+func (UnimplementedBoardServiceServer) StreamTicks(*StreamTicksRequest, BoardService_StreamTicksServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamTicks not implemented")
 }
 func (UnimplementedBoardServiceServer) mustEmbedUnimplementedBoardServiceServer() {}
 
@@ -495,6 +534,27 @@ func _BoardService_GetGeometries_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BoardService_StreamTicks_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(StreamTicksRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(BoardServiceServer).StreamTicks(m, &boardServiceStreamTicksServer{stream})
+}
+
+type BoardService_StreamTicksServer interface {
+	Send(*StreamTicksResponse) error
+	grpc.ServerStream
+}
+
+type boardServiceStreamTicksServer struct {
+	grpc.ServerStream
+}
+
+func (x *boardServiceStreamTicksServer) Send(m *StreamTicksResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // BoardService_ServiceDesc is the grpc.ServiceDesc for BoardService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -555,6 +615,12 @@ var BoardService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _BoardService_GetGeometries_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "StreamTicks",
+			Handler:       _BoardService_StreamTicks_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "component/board/v1/board.proto",
 }

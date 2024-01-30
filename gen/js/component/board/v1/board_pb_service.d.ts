@@ -122,6 +122,15 @@ type BoardServiceGetGeometries = {
   readonly responseType: typeof common_v1_common_pb.GetGeometriesResponse;
 };
 
+type BoardServiceStreamTicks = {
+  readonly methodName: string;
+  readonly service: typeof BoardService;
+  readonly requestStream: false;
+  readonly responseStream: true;
+  readonly requestType: typeof component_board_v1_board_pb.StreamTicksRequest;
+  readonly responseType: typeof component_board_v1_board_pb.StreamTicksResponse;
+};
+
 export class BoardService {
   static readonly serviceName: string;
   static readonly Status: BoardServiceStatus;
@@ -137,6 +146,7 @@ export class BoardService {
   static readonly GetDigitalInterruptValue: BoardServiceGetDigitalInterruptValue;
   static readonly SetPowerMode: BoardServiceSetPowerMode;
   static readonly GetGeometries: BoardServiceGetGeometries;
+  static readonly StreamTicks: BoardServiceStreamTicks;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -288,5 +298,6 @@ export class BoardServiceClient {
     requestMessage: common_v1_common_pb.GetGeometriesRequest,
     callback: (error: ServiceError|null, responseMessage: common_v1_common_pb.GetGeometriesResponse|null) => void
   ): UnaryResponse;
+  streamTicks(requestMessage: component_board_v1_board_pb.StreamTicksRequest, metadata?: grpc.Metadata): ResponseStream<component_board_v1_board_pb.StreamTicksResponse>;
 }
 

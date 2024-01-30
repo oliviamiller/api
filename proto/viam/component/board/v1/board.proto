@@ -6,6 +6,7 @@ import "common/v1/common.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "go.viam.com/api/component/board/v1";
 option java_package = "com.viam.component.board.v1";
@@ -106,6 +107,13 @@ service BoardService {
   rpc GetGeometries(common.v1.GetGeometriesRequest) returns (common.v1.GetGeometriesResponse) {
     option (google.api.http) = {
       get: "/viam/api/v1/component/board/{name}/geometries"
+    };
+  }
+
+  // StreamTicks starts a stream of ticks for the given digital interrupts
+  rpc StreamTicks(StreamTicksRequest) returns (stream StreamTicksResponse) {
+    option (google.api.http) = {
+      get: "/viam/api/v1/component/board/{name}/tick_stream"
     };
   }
 }
@@ -244,3 +252,26 @@ message SetPowerModeRequest {
 }
 
 message SetPowerModeResponse {}
+
+message Tick {
+  // Timestamp of tick
+  google.protobuf.Timestamp time = 1;
+  // Value high or low of the tick
+  bool high = 2;
+}
+
+message StreamTicksRequest {
+  // Board name
+  string name = 1;
+  // Name of digital interrupts to recieve ticks from
+  repeated string interrupts = 2;
+  // Additional arguments to the method
+  google.protobuf.Struct extra = 99;
+}
+
+message StreamTicksResponse {
+  // name of interrupt
+  string name = 1;
+  // tick of digital interrupt
+  Tick tick = 2;
+}
