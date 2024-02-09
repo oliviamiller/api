@@ -3,6 +3,7 @@ syntax = "proto3";
 package viam.app.v1;
 
 import "app/packages/v1/packages.proto";
+import "common/v1/common.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "tagger/v1/tagger.proto";
@@ -604,24 +605,16 @@ message GetRobotPartResponse {
 
 message GetRobotPartLogsRequest {
   string id = 1;
-  bool errors_only = 2;
+  // TODO(https://viam.atlassian.net/browse/APP-3877): Remove this field
+  bool errors_only = 2 [deprecated = true];
   optional string filter = 3;
   optional string page_token = 4;
-}
-
-message LogEntry {
-  string host = 1;
-  string level = 2;
-  google.protobuf.Timestamp time = 3;
-  string logger_name = 4;
-  string message = 5;
-  google.protobuf.Struct caller = 6;
-  string stack = 7;
-  repeated google.protobuf.Struct fields = 8;
+  // logs of all levels are returned when the levels field is empty
+  repeated string levels = 5;
 }
 
 message GetRobotPartLogsResponse {
-  repeated LogEntry logs = 1;
+  repeated common.v1.LogEntry logs = 1;
   string next_page_token = 2;
 }
 
@@ -632,7 +625,7 @@ message TailRobotPartLogsRequest {
 }
 
 message TailRobotPartLogsResponse {
-  repeated LogEntry logs = 1;
+  repeated common.v1.LogEntry logs = 1;
 }
 
 message GetRobotPartHistoryRequest {
@@ -678,7 +671,7 @@ message APIKey {
 }
 
 message GetRobotAPIKeysResponse {
-  repeated APIKey api_keys = 1;
+  repeated APIKeyWithAuthorizations api_keys = 1;
 }
 
 message DeleteRobotPartResponse {}

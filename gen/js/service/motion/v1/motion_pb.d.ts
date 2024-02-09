@@ -77,7 +77,7 @@ export namespace MoveResponse {
   }
 }
 
-export class MoveOnMapNewRequest extends jspb.Message {
+export class MoveOnMapRequest extends jspb.Message {
   getName(): string;
   setName(value: string): void;
 
@@ -101,70 +101,10 @@ export class MoveOnMapNewRequest extends jspb.Message {
   getMotionConfiguration(): MotionConfiguration | undefined;
   setMotionConfiguration(value?: MotionConfiguration): void;
 
-  hasExtra(): boolean;
-  clearExtra(): void;
-  getExtra(): google_protobuf_struct_pb.Struct | undefined;
-  setExtra(value?: google_protobuf_struct_pb.Struct): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): MoveOnMapNewRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: MoveOnMapNewRequest): MoveOnMapNewRequest.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: MoveOnMapNewRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): MoveOnMapNewRequest;
-  static deserializeBinaryFromReader(message: MoveOnMapNewRequest, reader: jspb.BinaryReader): MoveOnMapNewRequest;
-}
-
-export namespace MoveOnMapNewRequest {
-  export type AsObject = {
-    name: string,
-    destination?: common_v1_common_pb.Pose.AsObject,
-    componentName?: common_v1_common_pb.ResourceName.AsObject,
-    slamServiceName?: common_v1_common_pb.ResourceName.AsObject,
-    motionConfiguration?: MotionConfiguration.AsObject,
-    extra?: google_protobuf_struct_pb.Struct.AsObject,
-  }
-}
-
-export class MoveOnMapNewResponse extends jspb.Message {
-  getExecutionId(): string;
-  setExecutionId(value: string): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): MoveOnMapNewResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: MoveOnMapNewResponse): MoveOnMapNewResponse.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: MoveOnMapNewResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): MoveOnMapNewResponse;
-  static deserializeBinaryFromReader(message: MoveOnMapNewResponse, reader: jspb.BinaryReader): MoveOnMapNewResponse;
-}
-
-export namespace MoveOnMapNewResponse {
-  export type AsObject = {
-    executionId: string,
-  }
-}
-
-export class MoveOnMapRequest extends jspb.Message {
-  getName(): string;
-  setName(value: string): void;
-
-  hasDestination(): boolean;
-  clearDestination(): void;
-  getDestination(): common_v1_common_pb.Pose | undefined;
-  setDestination(value?: common_v1_common_pb.Pose): void;
-
-  hasComponentName(): boolean;
-  clearComponentName(): void;
-  getComponentName(): common_v1_common_pb.ResourceName | undefined;
-  setComponentName(value?: common_v1_common_pb.ResourceName): void;
-
-  hasSlamServiceName(): boolean;
-  clearSlamServiceName(): void;
-  getSlamServiceName(): common_v1_common_pb.ResourceName | undefined;
-  setSlamServiceName(value?: common_v1_common_pb.ResourceName): void;
+  clearObstaclesList(): void;
+  getObstaclesList(): Array<common_v1_common_pb.Geometry>;
+  setObstaclesList(value: Array<common_v1_common_pb.Geometry>): void;
+  addObstacles(value?: common_v1_common_pb.Geometry, index?: number): common_v1_common_pb.Geometry;
 
   hasExtra(): boolean;
   clearExtra(): void;
@@ -187,13 +127,15 @@ export namespace MoveOnMapRequest {
     destination?: common_v1_common_pb.Pose.AsObject,
     componentName?: common_v1_common_pb.ResourceName.AsObject,
     slamServiceName?: common_v1_common_pb.ResourceName.AsObject,
+    motionConfiguration?: MotionConfiguration.AsObject,
+    obstaclesList: Array<common_v1_common_pb.Geometry.AsObject>,
     extra?: google_protobuf_struct_pb.Struct.AsObject,
   }
 }
 
 export class MoveOnMapResponse extends jspb.Message {
-  getSuccess(): boolean;
-  setSuccess(value: boolean): void;
+  getExecutionId(): string;
+  setExecutionId(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): MoveOnMapResponse.AsObject;
@@ -207,7 +149,7 @@ export class MoveOnMapResponse extends jspb.Message {
 
 export namespace MoveOnMapResponse {
   export type AsObject = {
-    success: boolean,
+    executionId: string,
   }
 }
 
