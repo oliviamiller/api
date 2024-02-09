@@ -6,7 +6,6 @@ import "common/v1/common.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/struct.proto";
-import "google/protobuf/timestamp.proto";
 
 option go_package = "go.viam.com/api/component/board/v1";
 option java_package = "com.viam.component.board.v1";
@@ -254,8 +253,8 @@ message SetPowerModeRequest {
 message SetPowerModeResponse {}
 
 message Tick {
-  // Timestamp of tick
-  google.protobuf.Timestamp time = 1;
+  // Time in nanoseconds of a tick
+  uint64 time = 1;
   // Value high or low of the tick
   bool high = 2;
 }
