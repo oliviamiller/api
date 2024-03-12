@@ -252,25 +252,20 @@ message SetPowerModeRequest {
 
 message SetPowerModeResponse {}
 
-message Tick {
-  // Time in nanoseconds of a tick
-  uint64 time = 1;
-  // Value high or low of the tick
-  bool high = 2;
-}
-
 message StreamTicksRequest {
   // Board name
   string name = 1;
   // Name of digital interrupts to recieve ticks from
-  repeated string interrupts = 2;
+  repeated string pin_names = 2;
   // Additional arguments to the method
   google.protobuf.Struct extra = 99;
 }
 
 message StreamTicksResponse {
   // name of interrupt
-  string name = 1;
-  // tick of digital interrupt
-  Tick tick = 2;
+  string pin_name = 1;
+  // Time in nanoseconds of a tick
+  uint64 time = 2;
+  // Value high or low of the tick
+  bool high = 3;
 }
